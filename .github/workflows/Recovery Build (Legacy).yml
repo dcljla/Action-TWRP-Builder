@@ -146,11 +146,8 @@ jobs:
 
     - name: Building recovery
       run: |
-        sudo chmod 777 /home/runner/work/Action-TWRP-Builder/Action-TWRP-Builder/workspace/device/samsung/royceltectc/mkbootimg
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
-        cd /home/runner/work/Action-TWRP-Builder/Action-TWRP-Builder/workspace/kernel/samsung/royceltectc
-        make mrproper
         cd /home/runner/work/Action-TWRP-Builder/Action-TWRP-Builder/workspace
         lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
@@ -159,7 +156,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: | 
-          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ github.event.inputs.BUILD_TARGET }}.tar
+          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ github.event.inputs.BUILD_TARGET }}.img
           workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.zip
           workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*vendor*.img
         name: ${{ github.event.inputs.DEVICE_NAME }}-${{ github.run_id }}
